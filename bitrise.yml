@@ -73,10 +73,9 @@ workflows:
             echo | ls
             # write your script here
             echo "Path: $S3_DOWNLOAD_OUTPUT_PATH"
-            echo "Computed path: $BITRISE_SOURCE_DIR$KEYSTORE_NAME"​
+            echo "Computed path: $BITRISE_SOURCE_DIR/$KEYSTORE_NAME"​
             ls "$BITRISE_SOURCE_DIR"
             echo | pwd
-            echo | ls
     - certificate-and-profile-installer@1: {}
     - recreate-user-schemes@1:
         inputs:
@@ -116,4 +115,4 @@ app:
     KEYSTORE_NAME: Test_script.sh
   - opts:
       is_expand: false
-    BITRISE_SOURCE_DIR: "/Users/vagrant/git/"
+    BITRISE_SOURCE_DIR: "/Users/vagrant/git"
