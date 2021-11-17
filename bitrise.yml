@@ -36,6 +36,8 @@ workflows:
             # write your script here
             echo "Hello World!"
             echo "CKB"
+            echo | pwd
+            echo | ls
 
             # or run a script from your repository, like:
             # bash ./path/to/script.sh
