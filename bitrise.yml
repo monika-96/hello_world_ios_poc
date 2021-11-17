@@ -41,8 +41,10 @@ workflows:
 
             cp step.sh ../step.sh
 
-            echo | cd .. | ls
+            cd ..
 
+
+            echo | ls
 
             echo | pwd
 
