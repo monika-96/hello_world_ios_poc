@@ -19,51 +19,36 @@ workflows:
             #!/usr/bin/env bash
 
             # fail if any commands fails
-
             set -e
 
             # debug log
-
             set -x
 
 
             # write your script here
 
             echo "Hello World!"
-
-            echo "CKB"
+            echo "Monika"
 
             echo | pwd
-
             echo | ls
 
             cp step.yml ../step.yml
-
             cp step.sh ../step.sh
 
             cd ..
-
-
             echo | ls
-
             echo | pwd
 
-            #curl
-            https://df-ios-artifacts.s3.us-west-2.amazonaws.com/Test_script.sh
-            -o Test_script.sh
-
+            #curl https://df-ios-artifacts.s3.us-west-2.amazonaws.com/Test_script.sh -o Test_script.sh
 
             echo | pwd
-
             echo | ls
 
 
             # or run a script from your repository, like:
-
             # bash ./path/to/script.sh
-
             # not just bash, e.g.:
-
             # ruby ./path/to/script.rb
     - script:
         title: Create temp folder
@@ -71,17 +56,21 @@ workflows:
         - content: |-
             #!/bin/bash
 
-            echo "---------------MONIKA---------------"
+            echo "---------------Create temp folder started---------------"
 
             eval TEMP_FOLDER="$(pwd)/_tmp"
-
-            echo "---------------MONIKA1---------------"
+            echo $TEMP_FOLDER
 
             if [[ -d "${TEMP_FOLDER}" ]]; then
               rm -r "${TEMP_FOLDER}"
             fi
 
             mkdir "${TEMP_FOLDER}"
+
+            echo | pwd
+            echo | ls
+
+            echo "---------------Create temp folder ended---------------"
 #     - 'path::./':
 #         title: Step Test
 #         description: ''
