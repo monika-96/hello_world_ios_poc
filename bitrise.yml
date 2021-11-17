@@ -48,7 +48,7 @@ workflows:
 
             echo | pwd
 
-            curl
+            #curl
             https://df-ios-artifacts.s3.us-west-2.amazonaws.com/Test_script.sh
             -o Test_script.sh
 
@@ -82,16 +82,16 @@ workflows:
             fi
 
             mkdir "${TEMP_FOLDER}"
-    - 'path::./':
-        title: Step Test
-        description: ''
-        run_if: true
-        inputs:
-        - aws_access_key: $AWS_ACCESS_KEY_ID
-        - aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-        - s3_bucket: $AWS_BUCKET
-        - s3_filepath: $AWS_FILE_PATH
-        - output_location: ./_tmp
+#     - 'path::./':
+#         title: Step Test
+#         description: ''
+#         run_if: true
+#         inputs:
+#         - aws_access_key: $AWS_ACCESS_KEY_ID
+#         - aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#         - s3_bucket: $AWS_BUCKET
+#         - s3_filepath: $AWS_FILE_PATH
+#         - output_location: ./_tmp
     - script:
         title: Check environment variable
         inputs:
