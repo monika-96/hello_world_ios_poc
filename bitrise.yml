@@ -1,11 +1,11 @@
 ---
-format_version: 1.1.0
-default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+format_version: '11'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ios
 trigger_map:
-- push_branch: '*'
+- push_branch: "*"
   workflow: primary
-- pull_request_source_branch: '*'
+- pull_request_source_branch: "*"
   workflow: primary
 workflows:
   primary:
@@ -14,8 +14,9 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
     - script@1:
+        title: Testing scripts
         inputs:
-        - content: >-
+        - content: |-
             #!/usr/bin/env bash
 
             # fail if any commands fails
@@ -33,97 +34,58 @@ workflows:
             echo | pwd
             echo | ls
 
-            cp step.yml ../step.yml
-            cp step.sh ../step.sh
+            #cp step.yml ../step.yml
+            #cp step.sh ../step.sh
 
-            cd ..
-            echo | ls
-            echo | pwd
+            #cd ..
+            #echo | ls
+            #echo | pwd
 
             #curl https://df-ios-artifacts.s3.us-west-2.amazonaws.com/Test_script.sh -o Test_script.sh
 
-            echo | pwd
-            echo | ls
+            #echo | pwd
+            #echo | ls
 
 
             # or run a script from your repository, like:
             # bash ./path/to/script.sh
             # not just bash, e.g.:
             # ruby ./path/to/script.rb
-    - script:
-        title: Create temp folder
+    - git::https://github.com/FutureWorkshops/bitrise-step-s3-download.git@master:
+        title: Download keystore
+        inputs:
+        - aws_access_key: "$AWS_ACCESS_KEY_ID"
+        - aws_secret_access_key: "$AWS_SECRET_ACCESS_KEY"
+        - s3_bucket: "$CERTIFICATE_BUCKET"
+        - s3_filepath: "$KEYSTORE_NAME"
+        - output_location: "$BITRISE_SOURCE_DIR"
+    - script@1:
+        title: Echo path
         inputs:
         - content: |-
-            #!/bin/bash
-
-            echo "---------------Create temp folder started---------------"
-
-            eval TEMP_FOLDER="$(pwd)/_tmp"
-            echo $TEMP_FOLDER
-
-            if [[ -d "${TEMP_FOLDER}" ]]; then
-              rm -r "${TEMP_FOLDER}"
-            fi
-
-            mkdir "${TEMP_FOLDER}"
-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            echo "s3 download try"
             echo | pwd
             echo | ls
-
-            echo "---------------Create temp folder ended---------------"
-#     - 'path::./':
-#         title: Step Test
-#         description: ''
-#         run_if: true
-#         inputs:
-#         - aws_access_key: $AWS_ACCESS_KEY_ID
-#         - aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-#         - s3_bucket: $AWS_BUCKET
-#         - s3_filepath: $AWS_FILE_PATH
-#         - output_location: ./_tmp
-    - script:
-        title: Check environment variable
-        inputs:
-        - content: >-
-            #!/bin/bash
-
-            eval TEMP_FOLDER="$(pwd)/_tmp"
-
-            if [ "${TEMP_FOLDER}/${FILE_NAME}" = "${S3_DOWNLOAD_OUTPUT_PATH}" ];
-            then
-              echo "Output is correctly set to ${S3_DOWNLOAD_OUTPUT_PATH}"
-            else
-              echo "Bad output ${S3_DOWNLOAD_OUTPUT_PATH}"
-              echo "Expected ${TEMP_FOLDER}"
-              exit 1
-            fi
-    - script:
-        title: Check if file exists
-        inputs:
-        - content: |-
-            #!/bin/bash
-            if [[ -f "${S3_DOWNLOAD_OUTPUT_PATH}" ]]; then
-              echo "File exists in the output path"
-            else
-              echo "File not downloaded"
-              exit 1
-            fi
-    - script:
-        title: Remove temp folder
-        inputs:
-        - content: |-
-            #!/bin/bash
-            eval TEMP_FOLDER="$(pwd)/_tmp"
-            rm -rf "${TEMP_FOLDER}"
+            # write your script here
+            echo "Path: $S3_DOWNLOAD_OUTPUT_PATH"
+            echo "Computed path: $BITRISE_SOURCE_DIR$KEYSTORE_NAME"​
+            ls "$BITRISE_SOURCE_DIR"
+            echo | pwd
+            echo | ls
     - certificate-and-profile-installer@1: {}
     - recreate-user-schemes@1:
         inputs:
-        - project_path: $BITRISE_PROJECT_PATH
+        - project_path: "$BITRISE_PROJECT_PATH"
     - xcode-archive@4:
         inputs:
-        - project_path: $BITRISE_PROJECT_PATH
-        - scheme: $BITRISE_SCHEME
-        - distribution_method: $BITRISE_DISTRIBUTION_METHOD
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+        - distribution_method: "$BITRISE_DISTRIBUTION_METHOD"
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:
@@ -131,12 +93,27 @@ meta:
     machine_type_id: g2.4core
 app:
   envs:
-  - BITRISE_PROJECT_PATH: safari/Hello World/Hello World.xcodeproj
-    opts:
+  - opts:
       is_expand: false
+    BITRISE_PROJECT_PATH: safari/Hello World/Hello World.xcodeproj
   - opts:
       is_expand: false
     BITRISE_SCHEME: Hello World Extension
   - opts:
       is_expand: false
     BITRISE_DISTRIBUTION_METHOD: development
+  - opts:
+      is_expand: false
+    AWS_ACCESS_KEY_ID: AKIAUPTLJI4S366MVFPN
+  - opts:
+      is_expand: false
+    AWS_SECRET_ACCESS_KEY: SercsMsr/OfCZL392hANiCXl4FwCUBuboYaDAR+X
+  - opts:
+      is_expand: false
+    CERTIFICATE_BUCKET: df-ios-artifacts
+  - opts:
+      is_expand: false
+    KEYSTORE_NAME: Test_script.sh
+  - opts:
+      is_expand: false
+    BITRISE_SOURCE_DIR: "/Users/vagrant/git/"
