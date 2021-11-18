@@ -50,8 +50,8 @@ Hello <Provided String>
   3. Click on `Workflows`
   4. Select the `Secrets` tab
   5. Add the following keys and values
-      a. AWS_ACCESS_KEY_ID
-      b. AWS_SECRET_ACCESS_KEY
+        ### AWS_ACCESS_KEY_ID
+        ### AWS_SECRET_ACCESS_KEY
   
   
   DONE!!
