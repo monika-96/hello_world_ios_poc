@@ -49,9 +49,7 @@ Hello <Provided String>
   2. Navigate to added app
   3. Click on `Workflows`
   4. Select the `Secrets` tab
-  5. Add the following keys and values
-        ### AWS_ACCESS_KEY_ID
-        ### AWS_SECRET_ACCESS_KEY
+  5. Add the following keys and values -- AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
   
   
   DONE!!
