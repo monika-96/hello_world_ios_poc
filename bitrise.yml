@@ -2,11 +2,6 @@
 format_version: '11'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ios
-trigger_map:
-- push_branch: "*"
-  workflow: primary
-- pull_request_source_branch: "*"
-  workflow: primary
 workflows:
   primary:
     steps:
@@ -107,7 +102,7 @@ app:
     CERTIFICATE_BUCKET: df-ios-artifacts
   - opts:
       is_expand: false
-    KEYSTORE_NAME: Test_script.sh
+    KEYSTORE_NAME: artifacts.zip
   - opts:
       is_expand: false
-    BITRISE_SOURCE_DIR: "/Users/vagrant/git"
+    BITRISE_SOURCE_DIR: /Users/vagrant/git
