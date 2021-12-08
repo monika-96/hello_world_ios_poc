@@ -78,18 +78,6 @@ workflows:
             echo "Computed path: $BITRISE_SOURCE_DIR/$KEYSTORE_NAME"
             ls "$BITRISE_SOURCE_DIR"
             echo | pwd
-    - script@1:
-        title: Unzip the downloaded zip from s3
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            echo "zip location"
-            echo | pwd
-            echo | ls
             # unzip step
             echo | unzip artifacts.zip
             echo | ls
