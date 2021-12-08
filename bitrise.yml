@@ -8,7 +8,8 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    - script@1.1.3:
+    - script@1:
+        title: AWS Secrets
         inputs:
         - content: |
             #!/bin/bash
@@ -53,7 +54,7 @@ workflows:
             # not just bash, e.g.:
             # ruby ./path/to/script.rb
     - git::https://github.com/FutureWorkshops/bitrise-step-s3-download.git@master:
-        title: Download keystore
+        title: Download artifacts zip
         inputs:
         - aws_access_key: "$AWS_ACCESS_KEY_ID"
         - aws_secret_access_key: "$AWS_SECRET_ACCESS_KEY"
@@ -61,7 +62,7 @@ workflows:
         - s3_filepath: "$KEYSTORE_NAME"
         - output_location: "$BITRISE_SOURCE_DIR"
     - script@1:
-        title: Echo path
+        title: Echo path where zip got downloaded
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -77,6 +78,24 @@ workflows:
             echo "Computed path: $BITRISE_SOURCE_DIR/$KEYSTORE_NAME"
             ls "$BITRISE_SOURCE_DIR"
             echo | pwd
+    - script@1:
+        title: Unzip the downloaded zip from s3
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            echo "zip location"
+            echo | pwd
+            echo | ls
+            # unzip step
+            echo | unzip artifacts.zip
+            echo | ls
+            # List artifacts folder contents
+            echo | cd artifacts 
+            echo | ls
     - certificate-and-profile-installer@1: {}
     - recreate-user-schemes@1:
         inputs:
@@ -105,4 +124,4 @@ app:
     KEYSTORE_NAME: artifacts.zip
   - opts:
       is_expand: false
-    BITRISE_SOURCE_DIR: /Users/vagrant/git
+    BITRISE_SOURCE_DIR: "/Users/vagrant/git"
